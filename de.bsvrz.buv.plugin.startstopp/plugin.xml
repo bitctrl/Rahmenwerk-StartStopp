@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <e4view
+            class="de.bsvrz.buv.plugin.startstopp.views.GraphView"
+            id="de.bsvrz.buv.plugin.startstopp.e4view1"
+            name="StartStopp-Graph"
+            restorable="true">
+      </e4view>
+   </extension>
+
+</plugin>

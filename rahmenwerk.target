@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="27">
+<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="31">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="de.bsvrz.sys.startstopp.api" version="2.0.0.qualifier"/>
@@ -8,6 +8,31 @@
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.feature.group" version="4.7.0.v20170612-1255"/>
 <repository location="http://download.eclipse.org/releases/oxygen/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="3.0.0.201709092300"/>
+<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="3.0.2.201709092300"/>
+<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="3.0.0.201709092300"/>
+<repository location="http://bitctrl.de/projekte/rw3.0/updatesite"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="1.0.0.201706221838"/>
+<repository location="http://download.eclipse.org/nebula/releases/latest"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.daf.feature.feature.group" version="3.9.2"/>
+<unit id="de.bsvrz.buv.vew.feature.feature.group" version="1.2.7"/>
+<repository location="http://www.bitctrl.de/projekte/kernsoftware/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.rw.bitctrl.feature.feature.group" version="3.0.2.201709101243"/>
+<unit id="de.bsvrz.iav.fuzzylib.feature.feature.group" version="2.1.1.201709040757"/>
+<unit id="de.bsvrz.iav.gllib.feature.feature.group" version="3.1.1.201709040757"/>
+<unit id="de.bsvrz.ibv.uda.feature.feature.group" version="2.1.1.201709040757"/>
+<unit id="de.bsvrz.puk.param.lib.feature.feature.group" version="2.3.2.201709040757"/>
+<unit id="de.bsvrz.sys.funclib.bitctrl.feature.feature.group" version="4.0.0.201709101243"/>
+<unit id="de.bsvrz.sys.funclib.dynobj.feature.feature.group" version="1.1.0.201709040757"/>
+<repository location="http://bitctrl.de/projekte/lose_rw3.0/updatesite"/>
 </location>
 </locations>
 </target>
