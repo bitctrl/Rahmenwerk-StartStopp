@@ -1,6 +1,9 @@
 package de.bsvrz.buv.plugin.startstopp.views;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -11,6 +14,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,6 +23,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
+import de.bsvrz.sys.startstopp.api.StartStoppClient;
+
 public class StartStoppView {
 
 	@Inject
@@ -26,6 +32,8 @@ public class StartStoppView {
 
 	private String hostName = "localhost";
 	private int port = 3000;
+
+	private ApplikationsListe appListe;
 	
 	@PostConstruct
 	public void createUI(Composite parent) {
@@ -36,33 +44,36 @@ public class StartStoppView {
 		Composite settingsPanel = createSettingsPanel(panel);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(settingsPanel);
 		
-		CTabFolder cTabFolder = new CTabFolder(panel, SWT.FLAT);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(cTabFolder);
+		CTabFolder folder = new CTabFolder(panel, SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(folder);
 		
-		Composite scrolledForm = new Composite(parent, SWT.NONE);
-		CTabItem tab = new CTabItem(cTabFolder, 0);
+		appListe = new ApplikationsListe(folder);
+		CTabItem tab = new CTabItem(folder, 0);
 		tab.setText("Runtime");
-		tab.setControl(scrolledForm);
+		tab.setControl(appListe);
 
-		scrolledForm = new Composite(parent, SWT.NONE);
-		tab = new CTabItem(cTabFolder, 0);
+		Composite scrolledForm = new Composite(folder, SWT.NONE);
+		tab = new CTabItem(folder, 0);
 		tab.setText("Startbedingungen");
 		tab.setControl(scrolledForm);
 
-		scrolledForm = new Composite(parent, SWT.NONE);
-		tab = new CTabItem(cTabFolder, 0);
+		scrolledForm = new Composite(folder, SWT.NONE);
+		tab = new CTabItem(folder, 0);
 		tab.setText("Stoppbedingungen");
 		tab.setControl(scrolledForm);
 		
-		cTabFolder.setSelection(0);
+		folder.setSelection(0);
 		
-		
-		System.err.println("ErzeugeUI in " + parent);
+		updateClient();
 	}
 	
+
+
+
+
 	private Composite createSettingsPanel(Composite parent) {
 		
-		Composite panel = new Composite(parent, SWT.NONE);
+		Composite panel = new Composite(parent, SWT.BORDER);
 		panel.setLayout(new GridLayout(4, false));
 
 		new Label(panel, SWT.NONE).setText("Host:");
@@ -72,7 +83,11 @@ public class StartStoppView {
 		hostNameText.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				hostName = hostNameText.getText();
+				String newHostName = hostNameText.getText();
+				if( !newHostName.equals(hostName)) {
+					hostName = newHostName;
+					updateClient();
+				}
 			}
 		});
 		
@@ -86,6 +101,7 @@ public class StartStoppView {
 			@Override
 			public void focusLost(FocusEvent e) {
 				port = portSpinner.getSelection();
+				updateClient();
 			}
 		});
 		portSpinner.addModifyListener((event)->port = portSpinner.getSelection());
@@ -99,11 +115,16 @@ public class StartStoppView {
 		hostName = state.getOrDefault("host", hostName);
 		port = Integer.parseInt(state.getOrDefault("port", Integer.toString(port)));
 	}
-	
+
 	@PersistState
 	public void saveState() {
 		final Map<String, String> state = part.getPersistedState();
 		state.put("host", hostName);
 		state.put("port", Integer.toString(port));
+	}
+
+	private void updateClient() {
+		StartStoppClient client = new StartStoppClient(hostName, port);
+		appListe.setClient(client);
 	}
 }
