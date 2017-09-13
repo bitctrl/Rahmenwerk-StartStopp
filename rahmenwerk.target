@@ -10,9 +10,9 @@
 <repository location="http://download.eclipse.org/releases/oxygen/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="3.0.0.201709092300"/>
-<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="3.0.2.201709092300"/>
-<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="3.0.0.201709092300"/>
+<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="3.1.0.201709121622"/>
+<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="3.1.0.201709121622"/>
+<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="3.1.0.201709121622"/>
 <repository location="http://bitctrl.de/projekte/rw3.0/updatesite"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -25,13 +25,13 @@
 <repository location="http://www.bitctrl.de/projekte/kernsoftware/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.rw.bitctrl.feature.feature.group" version="3.0.2.201709101243"/>
-<unit id="de.bsvrz.iav.fuzzylib.feature.feature.group" version="2.1.1.201709040757"/>
-<unit id="de.bsvrz.iav.gllib.feature.feature.group" version="3.1.1.201709040757"/>
-<unit id="de.bsvrz.ibv.uda.feature.feature.group" version="2.1.1.201709040757"/>
-<unit id="de.bsvrz.puk.param.lib.feature.feature.group" version="2.3.2.201709040757"/>
-<unit id="de.bsvrz.sys.funclib.bitctrl.feature.feature.group" version="4.0.0.201709101243"/>
-<unit id="de.bsvrz.sys.funclib.dynobj.feature.feature.group" version="1.1.0.201709040757"/>
+<unit id="de.bsvrz.buv.rw.bitctrl.feature.feature.group" version="3.0.2.201709121843"/>
+<unit id="de.bsvrz.iav.fuzzylib.feature.feature.group" version="2.1.1.201709121831"/>
+<unit id="de.bsvrz.iav.gllib.feature.feature.group" version="3.1.1.201709121831"/>
+<unit id="de.bsvrz.ibv.uda.feature.feature.group" version="2.1.1.201709121831"/>
+<unit id="de.bsvrz.puk.param.lib.feature.feature.group" version="2.3.2.201709121831"/>
+<unit id="de.bsvrz.sys.funclib.bitctrl.feature.feature.group" version="4.0.0.201709121843"/>
+<unit id="de.bsvrz.sys.funclib.dynobj.feature.feature.group" version="1.1.0.201709121831"/>
 <repository location="http://bitctrl.de/projekte/lose_rw3.0/updatesite"/>
 </location>
 </locations>
