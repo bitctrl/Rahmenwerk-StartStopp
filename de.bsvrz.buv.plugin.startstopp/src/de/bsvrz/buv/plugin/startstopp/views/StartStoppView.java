@@ -1,9 +1,6 @@
 package de.bsvrz.buv.plugin.startstopp.views;
 
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -14,10 +11,12 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
@@ -44,7 +43,7 @@ public class StartStoppView {
 		Composite settingsPanel = createSettingsPanel(panel);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(settingsPanel);
 		
-		CTabFolder folder = new CTabFolder(panel, SWT.BORDER);
+		CTabFolder folder = new CTabFolder(panel, SWT.BORDER | SWT.BOTTOM);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(folder);
 		
 		appListe = new ApplikationsListe(folder);
@@ -56,12 +55,20 @@ public class StartStoppView {
 		tab = new CTabItem(folder, 0);
 		tab.setText("Startbedingungen");
 		tab.setControl(scrolledForm);
-
-		scrolledForm = new Composite(folder, SWT.NONE);
+ 
+		Canvas canvas = new Canvas(folder, SWT.NONE);
+		canvas.addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				System.err.println("Paint: " + e);
+				e.gc.drawRectangle(10, 10, 100, 100);
+				e.gc.drawString("Datenverteiler", 20, 40);
+			}
+		});
 		tab = new CTabItem(folder, 0);
 		tab.setText("Stoppbedingungen");
-		tab.setControl(scrolledForm);
-		
+		tab.setControl(canvas);
 		folder.setSelection(0);
 		
 		updateClient();

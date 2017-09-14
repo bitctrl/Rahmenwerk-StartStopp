@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="39">
+<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="45">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="0.0.0"/>
-<repository location="http://bitctrl.de/projekte/rw3.0/updatesite"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="1.0.0.201706221838"/>
-<repository location="http://download.eclipse.org/nebula/releases/latest"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="de.bsvrz.buv.daf.feature.feature.group" version="3.9.2"/>
 <unit id="de.bsvrz.buv.vew.feature.feature.group" version="1.2.7"/>
@@ -25,6 +15,16 @@
 <unit id="de.bsvrz.sys.funclib.bitctrl.feature.feature.group" version="0.0.0"/>
 <unit id="de.bsvrz.sys.funclib.dynobj.feature.feature.group" version="0.0.0"/>
 <repository location="http://bitctrl.de/projekte/lose_rw3.0/updatesite"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="0.0.0"/>
+<repository location="http://bitctrl.de/projekte/rw3.0/updatesite"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="1.0.0.201706221838"/>
+<repository location="http://download.eclipse.org/nebula/releases/latest"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.feature.group" version="4.7.0.v20170612-1255"/>
@@ -47,7 +47,7 @@
 <unit id="de.bsvrz.sys.funclib.filelock" version="3.9.2"/>
 <unit id="de.bsvrz.sys.funclib.hexdump" version="3.9.2"/>
 <unit id="de.bsvrz.sys.funclib.timeout" version="3.9.2"/>
-<unit id="de.bsvrz.sys.startstopp.api" version="0.0.0"/>
+<unit id="de.bsvrz.sys.startstopp.api" version="2.0.0.qualifier"/>
 <unit id="javassist" version="3.20.0.GA"/>
 <unit id="javax.annotation-api" version="1.2.0"/>
 <unit id="javax.servlet-api" version="3.1.0"/>
