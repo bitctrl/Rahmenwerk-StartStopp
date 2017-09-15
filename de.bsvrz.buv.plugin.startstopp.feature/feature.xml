@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.bsvrz.buv.plugin.startstopp.feature"
+      label="StartStopp-Bedienung"
+      version="1.0.0.qualifier">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.13.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.e4.ui.di" version="1.2.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.services" version="1.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.core.di" version="1.6.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.model.workbench" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.workbench" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="de.bsvrz.sys.startstopp.api" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="javax.inject"/>
+   </requires>
+
+   <plugin
+         id="de.bsvrz.buv.plugin.startstopp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
