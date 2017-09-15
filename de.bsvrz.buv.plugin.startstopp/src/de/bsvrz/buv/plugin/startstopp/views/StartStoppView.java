@@ -33,6 +33,10 @@ public class StartStoppView {
 	private int port = 3000;
 
 	private ApplikationsListe appListe;
+
+	private StoppGraph stoppGraph;
+
+	private StartGraph startGraph;
 	
 	@PostConstruct
 	public void createUI(Composite parent) {
@@ -51,33 +55,20 @@ public class StartStoppView {
 		tab.setText("Runtime");
 		tab.setControl(appListe);
 
-		Composite scrolledForm = new Composite(folder, SWT.NONE);
+		startGraph = new StartGraph(folder);
 		tab = new CTabItem(folder, 0);
 		tab.setText("Startbedingungen");
-		tab.setControl(scrolledForm);
+		tab.setControl(startGraph);
  
-		Canvas canvas = new Canvas(folder, SWT.NONE);
-		canvas.addPaintListener(new PaintListener() {
-			
-			@Override
-			public void paintControl(PaintEvent e) {
-				System.err.println("Paint: " + e);
-				e.gc.drawRectangle(10, 10, 100, 100);
-				e.gc.drawString("Datenverteiler", 20, 40);
-			}
-		});
+		stoppGraph = new StoppGraph(folder);
 		tab = new CTabItem(folder, 0);
 		tab.setText("Stoppbedingungen");
-		tab.setControl(canvas);
+		tab.setControl(stoppGraph);
 		folder.setSelection(0);
 		
 		updateClient();
 	}
 	
-
-
-
-
 	private Composite createSettingsPanel(Composite parent) {
 		
 		Composite panel = new Composite(parent, SWT.BORDER);
@@ -133,5 +124,7 @@ public class StartStoppView {
 	private void updateClient() {
 		StartStoppClient client = new StartStoppClient(hostName, port);
 		appListe.setClient(client);
+		startGraph.setClient(client);
+		stoppGraph.setClient(client);
 	}
 }
