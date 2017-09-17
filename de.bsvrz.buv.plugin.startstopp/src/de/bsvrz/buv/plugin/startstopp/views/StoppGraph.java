@@ -1,30 +1,224 @@
 package de.bsvrz.buv.plugin.startstopp.views;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 import de.bsvrz.sys.startstopp.api.StartStoppClient;
 import de.bsvrz.sys.startstopp.api.StartStoppException;
+import de.bsvrz.sys.startstopp.api.jsonschema.Inkarnation;
+import de.bsvrz.sys.startstopp.api.jsonschema.KernSystem;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartStoppSkript;
+import de.bsvrz.sys.startstopp.api.jsonschema.StoppBedingung;
+import de.bsvrz.sys.startstopp.api.jsonschema.Util;
 
-public class StoppGraph extends Composite {
+public class StoppGraph extends Composite implements PaintListener {
 
 	private StartStoppSkript skript;
-
+	private List<ApplikationFigur> figuren = new ArrayList<>();
+	private StartStoppClient client;
 
 	public StoppGraph(Composite parent) {
 		super(parent, SWT.NONE);
+		setLayout(null);
+		addPaintListener(this);
+		
+		Menu popupMenu = new Menu(this);
+		MenuItem refreshItem = new MenuItem(popupMenu, SWT.CASCADE);
+		refreshItem.setText("Aktualisieren");
+		refreshItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (client != null) {
+					setClient(client);
+				}
+			}
+		});
+		this.setMenu(popupMenu);
 	}
-
 
 	public void setClient(StartStoppClient client) {
 		try {
+			this.client = client;
 			skript = client.getCurrentSkript();
+			berechneApplikationsAbhaengigkeiten();
 		} catch (StartStoppException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			figuren.clear();
+		}
+		this.redraw();
+	}
+
+	private void berechneApplikationsAbhaengigkeiten() {
+
+		figuren.clear();
+		
+		Map<String, ApplikationFigur> figurenMap = new LinkedHashMap<>();
+		List<KernSystem> kernSysteme = skript.getGlobal().getKernsysteme();
+		List<ApplikationFigur> otherApps = new ArrayList<>();
+
+		Map<String, Inkarnation> inkarnationen = new LinkedHashMap<>();
+		for (Inkarnation inkarnation : skript.getInkarnationen()) {
+			inkarnationen.put(inkarnation.getInkarnationsName(), inkarnation);
+			ApplikationFigur figur = new StoppApplikationFigur(inkarnation.getInkarnationsName());
+
+			for (KernSystem kernSystem : kernSysteme) {
+				if (kernSystem.getInkarnationsName().equals(figur.getName())) {
+					figur.setKernSystem(true);
+					break;
+				}
+			}
+			figurenMap.put(figur.getName(), figur);
+			if (!figur.isKernSystem()) {
+				otherApps.add(figur);
+			}
+		}
+
+		for (KernSystem kernSystem : kernSysteme) {
+			Inkarnation inkarnation = inkarnationen.remove(kernSystem.getInkarnationsName());
+			if (inkarnation == null) {
+				continue;
+			}
+
+			ApplikationFigur figur = figurenMap.get(kernSystem.getInkarnationsName());
+			if (figur == null) {
+				continue;
+			}
+
+			figuren.add(0, figur);
+			StoppBedingung stoppBedingung = inkarnation.getStoppBedingung();
+			List<ApplikationFigur> nachFolgerFiguren = new ArrayList<>(otherApps);
+			if (stoppBedingung != null) {
+				String rechner = stoppBedingung.getRechner();
+				if (rechner == null || rechner.trim().isEmpty()) {
+					for (String nachfolger : stoppBedingung.getNachfolger()) {
+						ApplikationFigur nachFolgerFigur = figurenMap.get(nachfolger);
+						if (nachFolgerFigur != null) {
+							nachFolgerFiguren.add(nachFolgerFigur);
+						} else {
+							System.err.println(
+									"Sollte in einem gültigen Skript nicht funktionieren, gegebenenfalls Bedingungen vervollständigen");
+						}
+					}
+				} else {
+					for (String nachfolger : stoppBedingung.getNachfolger()) {
+						ApplikationFigur vgf = figurenMap.get(rechner + ":" + nachfolger);
+						if (vgf == null) {
+							vgf = new StoppApplikationFigur(nachfolger, rechner, null, null);
+							figurenMap.put(rechner + ":" + nachfolger, vgf);
+							figuren.add(0, vgf);
+						}
+						nachFolgerFiguren.add(vgf);
+					}
+				}
+			}
+			
+			figur.setReferenzen(nachFolgerFiguren);
+		}
+
+		for (Inkarnation inkarnation : inkarnationen.values()) {
+
+			ApplikationFigur figur = figurenMap.get(inkarnation.getInkarnationsName());
+			if (figur == null) {
+				continue;
+			}
+
+			figuren.add(0, figur);
+
+			StoppBedingung stoppBedingung = inkarnation.getStoppBedingung();
+			if (stoppBedingung != null) {
+				String rechner = stoppBedingung.getRechner();
+				if (rechner == null || rechner.trim().isEmpty()) {
+					List<ApplikationFigur> referenzFiguren = new ArrayList<>();
+					for (String nachfolger : stoppBedingung.getNachfolger()) {
+						ApplikationFigur referenzFigur = figurenMap.get(nachfolger);
+						if (referenzFigur != null) {
+							referenzFiguren.add(referenzFigur);
+						}
+						figur.setReferenzen(referenzFiguren);
+					}
+				} else {
+					List<ApplikationFigur> referenzFiguren = new ArrayList<>();
+					for (String referenz : stoppBedingung.getNachfolger()) {
+						ApplikationFigur vgf = figurenMap.get(rechner + ":" + referenz);
+						if (vgf == null) {
+							vgf = new StoppApplikationFigur(referenz, rechner, null, null);
+							figurenMap.put(rechner + ":" + referenz, vgf);
+							figuren.add(0, vgf);
+						}
+						referenzFiguren.add(vgf);
+					}
+
+					figur.setReferenzen(referenzFiguren);
+				}
+			}
 		}
 	}
+	
+	@Override
+	public void paintControl(PaintEvent e) {
+
+		int y = 0;
+		for (ApplikationFigur figur : figuren) {
+			figur.setPosition(figur.getXOffset(), y);
+			figur.paintControl(e);
+
+			y += figur.getHeight() + 10;
+
+			if (!figur.getReferenzen().isEmpty()) {
+				ApplikationFigur vorgaenger = figur.getReferenzen().get(0);
+
+				e.gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+				e.gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+
+				e.gc.drawLine(vorgaenger.getX() + vorgaenger.getWidth() / 2, vorgaenger.getY() + vorgaenger.getHeight(),
+						vorgaenger.getX() + vorgaenger.getWidth() / 2, figur.getY() + figur.getHeight() / 2);
+				e.gc.drawLine(vorgaenger.getX() + vorgaenger.getWidth() / 2, figur.getY() + figur.getHeight() / 2,
+						figur.getXOffset(), figur.getY() + figur.getHeight() / 2);
+
+				StoppBedingung stoppBedingung = figur.getStoppBedingung();
+				if( stoppBedingung == null) {
+					String vgString = "KS wartet";
+					Point textExtent = e.gc.textExtent(vgString);
+					e.gc.drawString(vgString, figur.getXOffset() - textExtent.x - 3, figur.getY() + figur.getHeight() / 2 + 3);
+
+				} else {
+
+					String vgString = vorgaenger.getName();
+					Point textExtent = e.gc.textExtent(vgString);
+					e.gc.drawString(vgString, figur.getXOffset() - textExtent.x - 3, figur.getY() + figur.getHeight() / 2 + 3);
+					
+					try {
+						long warteZeitInMsec = Util.convertToWarteZeitInMsec(Util.nonEmptyString(stoppBedingung.getWartezeit(), "0"));
+						if(( warteZeitInMsec / 1000) > 0) {
+							String wsString = "WZ: " + (warteZeitInMsec / 1000);
+							textExtent = e.gc.textExtent(wsString);
+							e.gc.drawString(wsString, figur.getXOffset() - textExtent.x - 3, figur.getY() + figur.getHeight() / 2 - textExtent.y - 3);
+						}
+					} catch (StartStoppException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+
+		for (ApplikationFigur figur : figuren) {
+			figur.paintControl(e);
+		}
+		// TODO Auto-generated method stub
+
+	}
+
 }
