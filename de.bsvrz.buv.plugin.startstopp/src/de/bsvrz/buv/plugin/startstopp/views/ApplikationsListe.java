@@ -50,7 +50,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.progress.UIJob;
@@ -120,7 +119,7 @@ public class ApplikationsListe extends Composite {
 		tablePanel.setLayout(new FillLayout());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tablePanel);
 
-		applikationViewer = new TableViewer(tablePanel, SWT.FULL_SELECTION);
+		applikationViewer = new TableViewer(tablePanel, SWT.FULL_SELECTION | SWT.BORDER);
 		applikationViewer.getTable().setHeaderVisible(true);
 
 		TableLayout tableLayout = new TableLayout();
@@ -144,10 +143,10 @@ public class ApplikationsListe extends Composite {
 
 		applikationViewer.setContentProvider(new ArrayContentProvider());
 		applikationViewer.setLabelProvider(new ApplikationTableLabelProvider());
-		applikationViewer.getTable().setHeaderBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+// TODO enable with OXYGEN		applikationViewer.getTable().setHeaderBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
 		applikationViewer.addSelectionChangedListener((event) -> actionPanel.setSelection(event.getSelection()));
 
-		messageLabel = new Label(this, SWT.NONE);
+		messageLabel = new Label(this, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(messageLabel);
 
 		addDisposeListener((event) -> dispose(event));

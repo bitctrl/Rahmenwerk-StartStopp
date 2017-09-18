@@ -1,36 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="54">
+<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="56">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.ecore.feature.group" version="2.13.0.v20170609-0707"/>
-<unit id="org.eclipse.platform.feature.group" version="4.7.0.v20170612-1255"/>
-<repository location="http://download.eclipse.org/releases/oxygen/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.daf.feature.feature.group" version="3.9.2"/>
-<unit id="de.bsvrz.buv.vew.feature.feature.group" version="1.2.7"/>
-<repository location="http://www.bitctrl.de/projekte/kernsoftware/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.rw.bitctrl.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.iav.fuzzylib.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.iav.gllib.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.ibv.uda.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.puk.param.lib.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.sys.funclib.bitctrl.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.sys.funclib.dynobj.feature.feature.group" version="0.0.0"/>
-<repository location="http://bitctrl.de/projekte/lose_rw3.0/updatesite"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="0.0.0"/>
-<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="0.0.0"/>
-<repository location="http://bitctrl.de/projekte/rw3.0/updatesite"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="1.0.0.201706221838"/>
-<repository location="http://download.eclipse.org/nebula/releases/latest"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="com.bitctrl" version="2.0.2"/>
 <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.9.1"/>
@@ -77,6 +47,36 @@
 <unit id="org.glassfish.jersey.media.jersey-media-jaxb" version="2.24.0"/>
 <unit id="org.glassfish.jersey.media.jersey-media-json-jackson" version="2.24.0"/>
 <repository location="http://bitctrl.de/projekte/bitctrl_common"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.daf.feature.feature.group" version="3.9.2"/>
+<unit id="de.bsvrz.buv.vew.feature.feature.group" version="1.2.7"/>
+<repository location="http://www.bitctrl.de/projekte/kernsoftware/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.rw.bitctrl.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.iav.fuzzylib.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.iav.gllib.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.ibv.uda.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.puk.param.lib.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.sys.funclib.bitctrl.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.sys.funclib.dynobj.feature.feature.group" version="0.0.0"/>
+<repository location="http://bitctrl.de/projekte/lose_rw3.0/updatesite"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.rw.rw.berechtigungen.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.buv.rw.rw.core.feature.feature.group" version="0.0.0"/>
+<unit id="de.bsvrz.buv.rw.rw.einstellungen.feature.feature.group" version="0.0.0"/>
+<repository location="http://bitctrl.de/projekte/rw3.0/updatesite"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.ecore.feature.group" version="2.12.0.v20160420-0247"/>
+<unit id="org.eclipse.platform.feature.group" version="4.6.3.v20170301-0400"/>
+<repository location="http://download.eclipse.org/releases/neon/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="1.0.0.201706221838"/>
+<repository location="http://download.eclipse.org/nebula/releases/latest"/>
 </location>
 </locations>
 </target>
