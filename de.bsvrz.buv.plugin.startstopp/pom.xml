@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.bsvrz.buv.plugin.startstopp</groupId>
 	<artifactId>de.bsvrz.buv.plugin.startstopp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<name>StartStopp - Plugin</name>
 
@@ -23,6 +23,11 @@
 			<id>eclipse-oxygen</id>
 			<url>http://download.eclipse.org/releases/oxygen</url>
 			<layout>p2</layout>
+		</repository>
+		<repository> 
+            <id>bitctrl-common</id>
+            <url>http://bitctrl.de/projekte/bitctrl_common</url>
+            <layout>p2</layout>
 		</repository>
 	</repositories>
 
