@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.bsvrz.buv.plugin.startstopp.feature.jar" id="de.bsvrz.buv.plugin.startstopp.feature" version="0.0.0">
+      <category name="startstopp"/>
+   </feature>
+   <category-def name="startstopp" label="StartStopp"/>
+</site>
