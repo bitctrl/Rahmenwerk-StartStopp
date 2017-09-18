@@ -69,7 +69,7 @@ public class OnlineActionPanel extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				if (applikation != null && client != null) {
-					ApplikationInfoDialog dialog = new ApplikationInfoDialog(getShell(), client, applikation);
+					ApplikationInfoDialog dialog = new ApplikationInfoDialog(getShell(), applikation);
 					dialog.open();
 				}
 			}

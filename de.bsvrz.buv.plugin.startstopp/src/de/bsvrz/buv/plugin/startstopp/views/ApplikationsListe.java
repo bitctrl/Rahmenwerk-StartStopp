@@ -161,7 +161,6 @@ public class ApplikationsListe extends Composite {
 	}
 
 	private void dispose(DisposeEvent event) {
-		System.err.println("Dispose");
 		disposed = true;
 		updater.shutdown();
 	}
