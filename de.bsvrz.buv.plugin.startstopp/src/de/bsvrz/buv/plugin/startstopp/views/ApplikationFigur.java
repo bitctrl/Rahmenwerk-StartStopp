@@ -1,3 +1,29 @@
+/*
+ * Segment 10 System (Sys), SWE 10.1 StartStopp - Plugin
+ * Copyright (C) 2007-2017 BitCtrl Systems GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.buv.plugin.startstopp.views;
 
 import java.util.ArrayList;
@@ -62,16 +88,21 @@ public abstract class ApplikationFigur implements PaintListener {
 		textHeight = e.gc.stringExtent(name).y;
 		e.gc.fillRectangle(x, y, getWidth(), getHeight());
 		e.gc.drawRectangle(x, y, getWidth(), getHeight());
-		e.gc.drawString(name, x + (getWidth() - textWidth) /2, y + 10);
+		e.gc.drawString(name, x + (getWidth() - textWidth) / 2, y + 10);
 
-		String rechnerStr = rechner == null ? "lokal" : rechner;
+		String rechnerStr;
+		if (rechner == null) {
+			rechnerStr = "lokal";
+		} else {
+			rechnerStr = rechner;
+		}
 		textWidth = e.gc.stringExtent(rechnerStr).x;
-		e.gc.drawString(rechnerStr, x + (getWidth() - textWidth) /2, y + 10 + textHeight + 5);
+		e.gc.drawString(rechnerStr, x + (getWidth() - textWidth) / 2, y + 10 + textHeight + 5);
 	}
 
-	void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
+	void setPosition(int xPos, int yPos) {
+		this.x = xPos;
+		this.y = yPos;
 	}
 
 	int getWidth() {
@@ -85,7 +116,7 @@ public abstract class ApplikationFigur implements PaintListener {
 	List<ApplikationFigur> getReferenzen() {
 		return referenzen;
 	}
-	
+
 	public void setReferenzen(List<ApplikationFigur> referenzen) {
 		this.referenzen.clear();
 		this.referenzen.addAll(referenzen);
@@ -125,11 +156,11 @@ public abstract class ApplikationFigur implements PaintListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} 
+		}
 
 		return result + (int) warteZeit;
 	}
-	
+
 	void setKernSystem(boolean kernSystem) {
 		this.kernSystem = kernSystem;
 	}
@@ -151,17 +182,17 @@ public abstract class ApplikationFigur implements PaintListener {
 	}
 
 	StartBedingung getStartBedingung() {
-		if( inkarnation == null) {
+		if (inkarnation == null) {
 			return null;
 		}
 		return inkarnation.getStartBedingung();
 	}
 
 	StoppBedingung getStoppBedingung() {
-		if( inkarnation == null) {
+		if (inkarnation == null) {
 			return null;
 		}
 		return inkarnation.getStoppBedingung();
 	}
-	
+
 }

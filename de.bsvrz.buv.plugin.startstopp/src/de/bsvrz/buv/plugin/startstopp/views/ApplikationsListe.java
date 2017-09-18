@@ -1,3 +1,29 @@
+/*
+ * Segment 10 System (Sys), SWE 10.1 StartStopp - Plugin
+ * Copyright (C) 2007-2017 BitCtrl Systems GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.buv.plugin.startstopp.views;
 
 import java.util.Collections;
@@ -12,8 +38,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -34,7 +62,7 @@ import de.bsvrz.sys.startstopp.api.jsonschema.Util;
 
 public class ApplikationsListe extends Composite {
 
-	public class ApplikationTableLabelProvider extends LabelProvider implements ITableLabelProvider {
+	public static class ApplikationTableLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -44,9 +72,9 @@ public class ApplikationsListe extends Composite {
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof Applikation) {
-				
+
 				Applikation applikation = (Applikation) element;
-				
+
 				switch (columnIndex) {
 				case 0:
 					return applikation.getInkarnation().getInkarnationsName();
@@ -56,6 +84,8 @@ public class ApplikationsListe extends Composite {
 					return applikation.getStatus().name();
 				case 3:
 					return applikation.getStartMeldung();
+				default:
+					break;
 				}
 			}
 			return getText(element);
@@ -68,17 +98,29 @@ public class ApplikationsListe extends Composite {
 	private StartStoppClient client;
 	private TableViewer applikationViewer;
 	private Label messageLabel;
+	private OnlineStatusPanel statusPanel;
+	private OnlineActionPanel actionPanel;
 
 	public ApplikationsListe(Composite parent) {
 		super(parent, SWT.NONE);
 
 		setLayout(new GridLayout());
 
+		Composite headerPanel = new Composite(this, SWT.NONE);
+		headerPanel.setLayout(new GridLayout(2, false));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(headerPanel);
+		
+		actionPanel = new OnlineActionPanel(headerPanel);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(actionPanel);
+
+		statusPanel = new OnlineStatusPanel(headerPanel);
+		GridDataFactory.fillDefaults().grab(false, false).align(SWT.END, SWT.CENTER).applyTo(statusPanel);
+
 		Composite tablePanel = new Composite(this, SWT.NONE);
 		tablePanel.setLayout(new FillLayout());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tablePanel);
-		
-		applikationViewer = new TableViewer(tablePanel);
+
+		applikationViewer = new TableViewer(tablePanel, SWT.FULL_SELECTION);
 		applikationViewer.getTable().setHeaderVisible(true);
 
 		TableLayout tableLayout = new TableLayout();
@@ -103,6 +145,7 @@ public class ApplikationsListe extends Composite {
 		applikationViewer.setContentProvider(new ArrayContentProvider());
 		applikationViewer.setLabelProvider(new ApplikationTableLabelProvider());
 		applikationViewer.getTable().setHeaderBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+		applikationViewer.addSelectionChangedListener((event) -> actionPanel.setSelection(event.getSelection()));
 
 		messageLabel = new Label(this, SWT.NONE);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(messageLabel);
@@ -114,6 +157,7 @@ public class ApplikationsListe extends Composite {
 
 	public void setClient(StartStoppClient client) {
 		this.client = client;
+		actionPanel.setClient(client);
 	}
 
 	private void dispose(DisposeEvent event) {
@@ -129,11 +173,13 @@ public class ApplikationsListe extends Composite {
 
 		try {
 			List<Applikation> applikationen = client.getApplikationen();
-			updater.schedule(()->aktualisiereAnsicht(applikationen), 0, TimeUnit.MICROSECONDS);
+			updater.schedule(() -> aktualisiereAnsicht(applikationen), 0, TimeUnit.MICROSECONDS);
 		} catch (StartStoppException e) {
-			updater.schedule(()->aktualisiereAnsicht(Collections.emptyList(), e.getLocalizedMessage()), 0, TimeUnit.MICROSECONDS);
-			System.err.println();
+			updater.schedule(() -> aktualisiereAnsicht(Collections.emptyList(), e.getLocalizedMessage()), 0,
+					TimeUnit.MICROSECONDS);
 		}
+
+		updater.schedule(() -> statusPanel.refresh(client), 0, TimeUnit.MICROSECONDS);
 	}
 
 	private void aktualisiereAnsicht(List<Applikation> applikationen) {
@@ -144,11 +190,29 @@ public class ApplikationsListe extends Composite {
 		new UIJob("") {
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
-				applikationViewer.setInput(applikationen.toArray());
-				messageLabel.setText(Util.nonEmptyString(message));
+				if (!applikationViewer.getTable().isDisposed()) {
+					IStructuredSelection selection = (IStructuredSelection) applikationViewer.getSelection();
+					Object element = selection.getFirstElement();
+					applikationViewer.setInput(applikationen.toArray());
+
+					if( element instanceof Applikation) {
+						for( Applikation applikation : applikationen) {
+							if( applikation.getInkarnation().getInkarnationsName().equals(((Applikation) element).getInkarnation().getInkarnationsName())) {
+								applikationViewer.setSelection(new StructuredSelection(applikation));
+							}
+						}
+					}
+				}
+				if (!messageLabel.isDisposed()) {
+					messageLabel.setText(Util.nonEmptyString(message));
+				}
 				return Status.OK_STATUS;
 			}
 		}.schedule();
+	}
+
+	StartStoppClient getClient() {
+		return client;
 	}
 
 }

@@ -1,3 +1,29 @@
+/*
+ * Segment 10 System (Sys), SWE 10.1 StartStopp - Plugin
+ * Copyright (C) 2007-2017 BitCtrl Systems GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Contact Information:<br>
+ * BitCtrl Systems GmbH<br>
+ * Weißenfelser Straße 67<br>
+ * 04229 Leipzig<br>
+ * Phone: +49 341-490670<br>
+ * mailto: info@bitctrl.de
+ */
+
 package de.bsvrz.buv.plugin.startstopp.views;
 
 import java.util.Map;
@@ -34,7 +60,7 @@ public class StartStoppView {
 	private StoppGraph stoppGraph;
 
 	private StartGraph startGraph;
-	
+
 	@PostConstruct
 	public void createUI(Composite parent) {
 
@@ -43,10 +69,10 @@ public class StartStoppView {
 
 		Composite settingsPanel = createSettingsPanel(panel);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(settingsPanel);
-		
+
 		CTabFolder folder = new CTabFolder(panel, SWT.BORDER | SWT.BOTTOM);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(folder);
-		
+
 		appListe = new ApplikationsListe(folder);
 		CTabItem tab = new CTabItem(folder, 0);
 		tab.setText("Runtime");
@@ -56,36 +82,36 @@ public class StartStoppView {
 		tab = new CTabItem(folder, 0);
 		tab.setText("Startbedingungen");
 		tab.setControl(startGraph);
- 
+
 		stoppGraph = new StoppGraph(folder);
 		tab = new CTabItem(folder, 0);
 		tab.setText("Stoppbedingungen");
 		tab.setControl(stoppGraph);
 		folder.setSelection(0);
-		
+
 		updateClient();
 	}
-	
+
 	private Composite createSettingsPanel(Composite parent) {
-		
+
 		Composite panel = new Composite(parent, SWT.BORDER);
 		panel.setLayout(new GridLayout(4, false));
 
 		new Label(panel, SWT.NONE).setText("Host:");
-		
+
 		Text hostNameText = new Text(panel, SWT.BORDER);
 		hostNameText.setText(hostName);
 		hostNameText.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				String newHostName = hostNameText.getText();
-				if( !newHostName.equals(hostName)) {
+				if (!newHostName.equals(hostName)) {
 					hostName = newHostName;
 					updateClient();
 				}
 			}
 		});
-		
+
 		new Label(panel, SWT.NONE).setText("Port:");
 
 		Spinner portSpinner = new Spinner(panel, SWT.BORDER);
@@ -99,7 +125,7 @@ public class StartStoppView {
 				updateClient();
 			}
 		});
-		portSpinner.addModifyListener((event)->port = portSpinner.getSelection());
+		portSpinner.addModifyListener((event) -> port = portSpinner.getSelection());
 
 		return panel;
 	}
@@ -120,8 +146,14 @@ public class StartStoppView {
 
 	private void updateClient() {
 		StartStoppClient client = new StartStoppClient(hostName, port);
-		appListe.setClient(client);
-		startGraph.setClient(client);
-		stoppGraph.setClient(client);
+		if (appListe != null) {
+			appListe.setClient(client);
+		}
+		if (startGraph != null) {
+			startGraph.setClient(client);
+		}
+		if (stoppGraph != null) {
+			stoppGraph.setClient(client);
+		}
 	}
 }
