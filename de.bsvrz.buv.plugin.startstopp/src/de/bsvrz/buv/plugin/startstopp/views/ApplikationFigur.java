@@ -32,6 +32,8 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Drawable;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
 import de.bsvrz.sys.startstopp.api.StartStoppException;
@@ -52,14 +54,14 @@ public abstract class ApplikationFigur implements PaintListener {
 
 	private int x;
 	private int y;
-	private int textWidth;
-	private int textHeight;
+	private final int textWidth;
+	private final int textHeight;
 
-	protected ApplikationFigur(boolean start, String name) {
-		this(start, name, null, null, null);
+	protected ApplikationFigur(GC gc, boolean start, String name) {
+		this(gc, start, name, null, null, null);
 	}
 
-	protected ApplikationFigur(boolean start, String name, String rechner, List<ApplikationFigur> vorgaenger,
+	protected ApplikationFigur(GC gc, boolean start, String name, String rechner, List<ApplikationFigur> vorgaenger,
 			Inkarnation inkarnation) {
 		this.start = start;
 		this.name = name;
@@ -68,6 +70,9 @@ public abstract class ApplikationFigur implements PaintListener {
 			this.referenzen.addAll(vorgaenger);
 		}
 		this.inkarnation = inkarnation;
+		textWidth = gc.stringExtent(name).x;
+		textHeight = gc.stringExtent(name).y;
+
 	}
 
 	@Override
@@ -84,8 +89,6 @@ public abstract class ApplikationFigur implements PaintListener {
 			e.gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
 		}
 
-		textWidth = e.gc.stringExtent(name).x;
-		textHeight = e.gc.stringExtent(name).y;
 		e.gc.fillRectangle(x, y, getWidth(), getHeight());
 		e.gc.drawRectangle(x, y, getWidth(), getHeight());
 		e.gc.drawString(name, x + (getWidth() - textWidth) / 2, y + 10);
@@ -96,8 +99,9 @@ public abstract class ApplikationFigur implements PaintListener {
 		} else {
 			rechnerStr = rechner;
 		}
-		textWidth = e.gc.stringExtent(rechnerStr).x;
-		e.gc.drawString(rechnerStr, x + (getWidth() - textWidth) / 2, y + 10 + textHeight + 5);
+		
+		int rechnerStrWidth = e.gc.stringExtent(rechnerStr).x;
+		e.gc.drawString(rechnerStr, x + (getWidth() - rechnerStrWidth) / 2, y + 10 + rechnerStrWidth + 5);
 	}
 
 	void setPosition(int xPos, int yPos) {
@@ -122,7 +126,7 @@ public abstract class ApplikationFigur implements PaintListener {
 		this.referenzen.addAll(referenzen);
 	}
 
-	public int getXOffset() {
+	public int getReferenzOffset() {
 		int result = 0;
 
 		if (referenzen.isEmpty()) {
@@ -135,9 +139,9 @@ public abstract class ApplikationFigur implements PaintListener {
 		}
 		for (ApplikationFigur figur : referenzen) {
 			if (startOnBeginn) {
-				result = Math.max(result, figur.getXOffset());
+				result = Math.max(result, figur.getReferenzOffset());
 			} else {
-				result = Math.max(result, figur.getXOffset() + figur.getWidth());
+				result = Math.max(result, figur.getReferenzOffset() + figur.getWidth());
 			}
 		}
 

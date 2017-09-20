@@ -39,11 +39,15 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ScrollBar;
 
 import de.bsvrz.sys.startstopp.api.StartStoppClient;
 import de.bsvrz.sys.startstopp.api.StartStoppException;
@@ -53,16 +57,61 @@ import de.bsvrz.sys.startstopp.api.jsonschema.StartBedingung;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartStoppSkript;
 import de.bsvrz.sys.startstopp.api.jsonschema.Util;
 
-public class StartGraph extends Composite implements PaintListener {
+public class StartGraph extends Canvas implements PaintListener {
 
 	private StartStoppSkript skript;
 	private List<StartApplikationFigur> figuren = new ArrayList<>();
 	private StartStoppClient client;
+	private int graphHeight;
+	private int graphWidth;
+	private Point origin;
 
 	public StartGraph(Composite parent) {
-		super(parent, SWT.NONE);
+		super(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_REDRAW_RESIZE);
+
 		setLayout(null);
 		addPaintListener(this);
+
+		origin = new Point(0, 0);
+
+		final ScrollBar hBar = getHorizontalBar();
+		hBar.addListener(SWT.Selection, e -> {
+			int hSelection = hBar.getSelection();
+			int destX = -hSelection - origin.x;
+			scroll(destX, 0, 0, 0, graphWidth, graphHeight, false);
+			origin.x = -hSelection;
+			redraw();
+		});
+		final ScrollBar vBar = getVerticalBar();
+		vBar.addListener(SWT.Selection, e -> {
+			int vSelection = vBar.getSelection();
+			int destY = -vSelection - origin.y;
+			scroll(0, destY, 0, 0, graphWidth, graphHeight, false);
+			origin.y = -vSelection;
+			redraw();
+		});
+		addListener(SWT.Resize, e -> {
+			Rectangle client = getClientArea();
+			hBar.setMaximum(graphWidth);
+			vBar.setMaximum(graphHeight);
+			hBar.setThumb(Math.min(graphWidth, client.width));
+			vBar.setThumb(Math.min(graphHeight, client.height));
+			int hPage = graphWidth - client.width;
+			int vPage = graphHeight - client.height;
+			int hSelection = hBar.getSelection();
+			int vSelection = vBar.getSelection();
+			if (hSelection >= hPage) {
+				if (hPage <= 0)
+					hSelection = 0;
+				origin.x = -hSelection;
+			}
+			if (vSelection >= vPage) {
+				if (vPage <= 0)
+					vSelection = 0;
+				origin.y = -vSelection;
+			}
+			redraw();
+		});
 
 		Menu popupMenu = new Menu(this);
 		MenuItem refreshItem = new MenuItem(popupMenu, SWT.CASCADE);
@@ -100,6 +149,8 @@ public class StartGraph extends Composite implements PaintListener {
 
 	private void berechneApplikationsAbhaengigkeiten() {
 
+		GC gc = new GC(this);
+
 		figuren.clear();
 
 		Map<String, StartApplikationFigur> figurenMap = new LinkedHashMap<>();
@@ -119,7 +170,7 @@ public class StartGraph extends Composite implements PaintListener {
 
 			StartBedingung startBedingung = inkarnation.getStartBedingung();
 			if (startBedingung == null) {
-				StartApplikationFigur figur = new StartApplikationFigur(inkarnation.getInkarnationsName());
+				StartApplikationFigur figur = new StartApplikationFigur(gc, inkarnation.getInkarnationsName());
 				figur.setKernSystem(true);
 				figurenMap.put(inkarnation.getInkarnationsName(), figur);
 				figuren.add(figur);
@@ -137,7 +188,7 @@ public class StartGraph extends Composite implements PaintListener {
 									"Sollte in einem gültigen Skript nicht funktionieren, gegebenenfalls Bedingungen vervollständigen");
 						}
 					}
-					StartApplikationFigur figur = new StartApplikationFigur(inkarnation.getInkarnationsName(), null,
+					StartApplikationFigur figur = new StartApplikationFigur(gc, inkarnation.getInkarnationsName(), null,
 							vorgaengerFiguren, inkarnation);
 					figur.setKernSystem(true);
 					figurenMap.put(inkarnation.getInkarnationsName(), figur);
@@ -148,13 +199,13 @@ public class StartGraph extends Composite implements PaintListener {
 					for (String vorgaenger : startBedingung.getVorgaenger()) {
 						StartApplikationFigur vgf = figurenMap.get(rechner + ":" + vorgaenger);
 						if (vgf == null) {
-							vgf = new StartApplikationFigur(vorgaenger, rechner, null, null);
+							vgf = new StartApplikationFigur(gc, vorgaenger, rechner, null, null);
 							figurenMap.put(rechner + ":" + vorgaenger, vgf);
 							figuren.add(vgf);
 						}
 						vorgaengerFiguren.add(vgf);
 					}
-					StartApplikationFigur figur = new StartApplikationFigur(inkarnation.getInkarnationsName(), null,
+					StartApplikationFigur figur = new StartApplikationFigur(gc, inkarnation.getInkarnationsName(), null,
 							vorgaengerFiguren, inkarnation);
 					figurenMap.put(inkarnation.getInkarnationsName(), figur);
 					figuren.add(figur);
@@ -170,7 +221,7 @@ public class StartGraph extends Composite implements PaintListener {
 
 				StartBedingung startBedingung = inkarnation.getStartBedingung();
 				if (startBedingung == null) {
-					StartApplikationFigur figur = new StartApplikationFigur(inkarnation.getInkarnationsName(), null,
+					StartApplikationFigur figur = new StartApplikationFigur(gc, inkarnation.getInkarnationsName(), null,
 							kernSystemFiguren, null);
 					figurenMap.put(inkarnation.getInkarnationsName(), figur);
 					figuren.add(figur);
@@ -188,7 +239,7 @@ public class StartGraph extends Composite implements PaintListener {
 								vorgaenderVollstaendig = false;
 							}
 							if (vorgaenderVollstaendig) {
-								StartApplikationFigur figur = new StartApplikationFigur(
+								StartApplikationFigur figur = new StartApplikationFigur(gc,
 										inkarnation.getInkarnationsName(), null, vorgaengerFiguren, inkarnation);
 								figurenMap.put(inkarnation.getInkarnationsName(), figur);
 								figuren.add(figur);
@@ -200,20 +251,37 @@ public class StartGraph extends Composite implements PaintListener {
 						for (String vorgaenger : startBedingung.getVorgaenger()) {
 							StartApplikationFigur vgf = figurenMap.get(rechner + ":" + vorgaenger);
 							if (vgf == null) {
-								vgf = new StartApplikationFigur(vorgaenger, rechner, null, null);
+								vgf = new StartApplikationFigur(gc, vorgaenger, rechner, null, null);
 								figurenMap.put(rechner + ":" + vorgaenger, vgf);
 								figuren.add(vgf);
 							}
 							vorgaengerFiguren.add(vgf);
 						}
-						StartApplikationFigur figur = new StartApplikationFigur(inkarnation.getInkarnationsName(), null,
-								vorgaengerFiguren, inkarnation);
+						StartApplikationFigur figur = new StartApplikationFigur(gc, inkarnation.getInkarnationsName(),
+								null, vorgaengerFiguren, inkarnation);
 						figurenMap.put(inkarnation.getInkarnationsName(), figur);
 						figuren.add(figur);
 						iterator.remove();
 					}
 				}
 			}
+		}
+
+		gc.dispose();
+
+		positioniereFiguren();
+	}
+
+	private void positioniereFiguren() {
+
+		int y = 0;
+		graphHeight = 0;
+		graphWidth = 0;
+		for (StartApplikationFigur figur : figuren) {
+			figur.setPosition(figur.getReferenzOffset(), y);
+			y += figur.getHeight() + 10;
+			graphHeight = Math.max(graphHeight, figur.getY() + figur.getHeight());
+			graphWidth = Math.max(graphWidth, figur.getX() + figur.getWidth());
 		}
 	}
 
@@ -222,7 +290,7 @@ public class StartGraph extends Composite implements PaintListener {
 
 		int y = 0;
 		for (StartApplikationFigur figur : figuren) {
-			figur.setPosition(figur.getXOffset(), y);
+			figur.setPosition(origin.x + figur.getReferenzOffset(), origin.y + y);
 			figur.paintControl(e);
 
 			y += figur.getHeight() + 10;
@@ -236,20 +304,20 @@ public class StartGraph extends Composite implements PaintListener {
 				e.gc.drawLine(vorgaenger.getX() + vorgaenger.getWidth() / 2, vorgaenger.getY() + vorgaenger.getHeight(),
 						vorgaenger.getX() + vorgaenger.getWidth() / 2, figur.getY() + figur.getHeight() / 2);
 				e.gc.drawLine(vorgaenger.getX() + vorgaenger.getWidth() / 2, figur.getY() + figur.getHeight() / 2,
-						figur.getXOffset(), figur.getY() + figur.getHeight() / 2);
+						figur.getX(), figur.getY() + figur.getHeight() / 2);
 
 				StartBedingung startBedingung = figur.getStartBedingung();
 				if (startBedingung == null) {
 					String vgString = "Kernsystem";
 					Point textExtent = e.gc.textExtent(vgString);
-					e.gc.drawString(vgString, figur.getXOffset() - textExtent.x - 3,
+					e.gc.drawString(vgString, figur.getX() - textExtent.x - 3,
 							figur.getY() + figur.getHeight() / 2 + 3);
 
 				} else {
 
 					String vgString = vorgaenger.getName();
 					Point textExtent = e.gc.textExtent(vgString);
-					e.gc.drawString(vgString, figur.getXOffset() - textExtent.x - 3,
+					e.gc.drawString(vgString, figur.getX() - textExtent.x - 3,
 							figur.getY() + figur.getHeight() / 2 + 3);
 
 					try {
@@ -259,11 +327,10 @@ public class StartGraph extends Composite implements PaintListener {
 							String wsString = startBedingung.getWarteart().name() + ": " + (warteZeitInMsec / 1000)
 									+ " s";
 							textExtent = e.gc.textExtent(wsString);
-							e.gc.drawString(wsString, figur.getXOffset() - textExtent.x - 3,
+							e.gc.drawString(wsString, figur.getX() - textExtent.x - 3,
 									figur.getY() + figur.getHeight() / 2 - textExtent.y - 3);
 						}
 					} catch (StartStoppException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -273,7 +340,5 @@ public class StartGraph extends Composite implements PaintListener {
 		for (StartApplikationFigur figur : figuren) {
 			figur.paintControl(e);
 		}
-		// TODO Auto-generated method stub
-
 	}
 }
