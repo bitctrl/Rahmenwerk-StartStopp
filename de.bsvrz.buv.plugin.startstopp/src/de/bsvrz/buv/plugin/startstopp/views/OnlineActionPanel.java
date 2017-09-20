@@ -74,6 +74,18 @@ public class OnlineActionPanel extends Composite {
 				}
 			}
 		});
+
+		button = new Button(group, SWT.PUSH);
+		button.setText("Meldungen");
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				if (applikation != null && client != null) {
+					ApplikationMeldungenDialog dialog = new ApplikationMeldungenDialog(getShell(), client, applikation);
+					dialog.open();
+				}
+			}
+		});
 	}
 
 	private void createSystemAktionen() {
