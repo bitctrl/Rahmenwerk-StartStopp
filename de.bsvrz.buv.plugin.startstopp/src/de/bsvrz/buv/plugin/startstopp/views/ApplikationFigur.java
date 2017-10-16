@@ -41,7 +41,7 @@ import de.bsvrz.sys.startstopp.api.jsonschema.Inkarnation;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartBedingung;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartBedingung.Warteart;
 import de.bsvrz.sys.startstopp.api.jsonschema.StoppBedingung;
-import de.bsvrz.sys.startstopp.api.jsonschema.Util;
+import de.bsvrz.sys.startstopp.api.util.Util;
 
 public abstract class ApplikationFigur implements PaintListener {
 

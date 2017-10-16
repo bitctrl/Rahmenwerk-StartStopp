@@ -24,7 +24,7 @@ import de.bsvrz.sys.startstopp.api.jsonschema.StartBedingung;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartFehlerVerhalten;
 import de.bsvrz.sys.startstopp.api.jsonschema.StoppBedingung;
 import de.bsvrz.sys.startstopp.api.jsonschema.StoppFehlerVerhalten;
-import de.bsvrz.sys.startstopp.api.jsonschema.Util;
+import de.bsvrz.sys.startstopp.api.util.Util;
 
 public class ApplikationInfoDialog extends TitleAreaDialog {
 

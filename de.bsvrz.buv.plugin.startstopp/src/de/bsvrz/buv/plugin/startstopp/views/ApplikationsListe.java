@@ -57,7 +57,7 @@ import org.eclipse.ui.progress.UIJob;
 import de.bsvrz.sys.startstopp.api.StartStoppClient;
 import de.bsvrz.sys.startstopp.api.StartStoppException;
 import de.bsvrz.sys.startstopp.api.jsonschema.Applikation;
-import de.bsvrz.sys.startstopp.api.jsonschema.Util;
+import de.bsvrz.sys.startstopp.api.util.Util;
 
 public class ApplikationsListe extends Composite {
 

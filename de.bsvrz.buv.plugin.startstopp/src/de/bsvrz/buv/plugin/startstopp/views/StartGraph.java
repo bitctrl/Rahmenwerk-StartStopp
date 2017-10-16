@@ -55,7 +55,7 @@ import de.bsvrz.sys.startstopp.api.jsonschema.Inkarnation;
 import de.bsvrz.sys.startstopp.api.jsonschema.KernSystem;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartBedingung;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartStoppSkript;
-import de.bsvrz.sys.startstopp.api.jsonschema.Util;
+import de.bsvrz.sys.startstopp.api.util.Util;
 
 public class StartGraph extends Canvas implements PaintListener {
 
