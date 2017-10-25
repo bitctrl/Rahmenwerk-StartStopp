@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="57">
+<?pde version="3.8"?><target name="rahmenwerk" sequenceNumber="61">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="de.bsvrz.buv.daf.feature.feature.group" version="3.9.2"/>
-<unit id="de.bsvrz.buv.vew.feature.feature.group" version="1.2.7"/>
-<repository location="http://www.bitctrl.de/projekte/kernsoftware/"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="de.bsvrz.buv.rw.bitctrl.feature.feature.group" version="0.0.0"/>
 <unit id="de.bsvrz.iav.fuzzylib.feature.feature.group" version="0.0.0"/>
@@ -32,6 +27,11 @@
 <repository location="http://download.eclipse.org/nebula/releases/latest"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="de.bsvrz.buv.daf.feature.feature.group" version="3.9.2"/>
+<unit id="de.bsvrz.buv.vew.feature.feature.group" version="1.2.7"/>
+<repository location="http://www.bitctrl.de/projekte/kernsoftware/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="com.bitctrl" version="2.0.2"/>
 <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.9.1"/>
 <unit id="com.fasterxml.jackson.core.jackson-core" version="2.9.1"/>
@@ -41,14 +41,7 @@
 <unit id="com.fasterxml.jackson.module.jackson-module-jaxb-annotations" version="2.8.4"/>
 <unit id="com.nimbusds.srp6a" version="1.0.0"/>
 <unit id="de.bsvrz.dav.daf" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.commandLineArgs" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.concurrent" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.crypt" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.debug" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.filelock" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.hexdump" version="3.9.2"/>
-<unit id="de.bsvrz.sys.funclib.timeout" version="3.9.2"/>
-<unit id="de.bsvrz.sys.startstopp.api" version="2.0.0.201709150800"/>
+<unit id="de.bsvrz.sys.startstopp.api" version="2.0.0.201710240943"/>
 <unit id="javassist" version="3.22.0.CR2"/>
 <unit id="javax.annotation-api" version="1.2.0"/>
 <unit id="javax.servlet-api" version="3.1.0"/>
