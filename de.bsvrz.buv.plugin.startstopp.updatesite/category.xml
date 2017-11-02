@@ -4,4 +4,5 @@
       <category name="startstopp"/>
    </feature>
    <category-def name="startstopp" label="StartStopp"/>
+   <repository-reference location="http://bitctrl.de/projekte/bitctrl_common" enabled="true" />
 </site>
