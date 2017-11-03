@@ -86,7 +86,7 @@ public class ApplikationMeldungenDialog extends TitleAreaDialog {
 		setTitleImage(image);
 
 		setTitle("Applikation: " + applikation.getInkarnation().getInkarnationsName());
-		setMessage("Startmeldungen der Appliaktion");
+		setMessage("Startmeldungen der Applikation");
 		
 
 		Composite panel = new Composite(parent, SWT.NONE);
