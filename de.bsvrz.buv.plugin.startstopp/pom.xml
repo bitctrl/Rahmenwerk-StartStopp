@@ -61,7 +61,7 @@
 				<configuration>
 					<configLocation>config/checkstyle.xml</configLocation>
 					<headerLocation>config/java.header</headerLocation>
-					<suppressionsLocation>config/checkstyle_suppressions.xml</suppressionsLocation>
+					<suppressionsLocation>config/checkstyle-suppressions.xml</suppressionsLocation>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -71,13 +71,6 @@
 				<configuration>
 					<excludeFilterFile>config/findbugs-exclude.xml</excludeFilterFile>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>
