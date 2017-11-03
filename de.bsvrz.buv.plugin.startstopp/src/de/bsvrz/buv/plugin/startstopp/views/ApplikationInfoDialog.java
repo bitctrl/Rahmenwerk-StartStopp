@@ -3,11 +3,13 @@ package de.bsvrz.buv.plugin.startstopp.views;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -17,6 +19,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import de.bsvrz.buv.plugin.startstopp.Activator;
 import de.bsvrz.sys.startstopp.api.jsonschema.Applikation;
 import de.bsvrz.sys.startstopp.api.jsonschema.Inkarnation;
 import de.bsvrz.sys.startstopp.api.jsonschema.StartArt;
@@ -172,19 +175,19 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 			button.setSelection(inkarnation.getInitialize());
 
 			StartBedingung startBedingung = inkarnation.getStartBedingung();
-			if( startBedingung != null) {
+			if (startBedingung != null) {
 				Group bedingungsGroup = new Group(group, SWT.NONE);
 				bedingungsGroup.setText("Startbedingung");
 				GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(bedingungsGroup);
 				bedingungsGroup.setLayout(new GridLayout(4, false));
-				
+
 				new Label(bedingungsGroup, SWT.NONE).setText("Vorgänger:");
 				label = new Label(bedingungsGroup, SWT.NONE);
 				label.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 				label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 				GridDataFactory.fillDefaults().grab(true, false).span(3, 1).applyTo(label);
 				String vorgaengerStr = String.join(",", startBedingung.getVorgaenger());
-				if( startBedingung.getRechner() != null && !startBedingung.getRechner().trim().isEmpty()) {
+				if (startBedingung.getRechner() != null && !startBedingung.getRechner().trim().isEmpty()) {
 					vorgaengerStr = startBedingung.getRechner() + ": " + vorgaengerStr;
 				}
 				label.setText(vorgaengerStr);
@@ -205,12 +208,12 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 			}
 
 			StartFehlerVerhalten startFehlerverhalten = inkarnation.getStartFehlerVerhalten();
-			if( startFehlerverhalten != null) {
+			if (startFehlerverhalten != null) {
 				Group bedingungsGroup = new Group(group, SWT.NONE);
 				bedingungsGroup.setText("Startfehlerverhalten");
 				GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(bedingungsGroup);
 				bedingungsGroup.setLayout(new GridLayout(4, false));
-				
+
 				new Label(bedingungsGroup, SWT.NONE).setText("Option:");
 				label = new Label(bedingungsGroup, SWT.NONE);
 				label.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
@@ -225,21 +228,21 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 				GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 				label.setText(Util.nonEmptyString(startFehlerverhalten.getWiederholungen()));
 			}
-			
+
 			StoppBedingung stoppBedingung = inkarnation.getStoppBedingung();
-			if( stoppBedingung != null) {
+			if (stoppBedingung != null) {
 				Group bedingungsGroup = new Group(group, SWT.NONE);
 				bedingungsGroup.setText("Stoppbedingung");
 				GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(bedingungsGroup);
 				bedingungsGroup.setLayout(new GridLayout(4, false));
-				
+
 				new Label(bedingungsGroup, SWT.NONE).setText("Nachfolger:");
 				label = new Label(bedingungsGroup, SWT.NONE);
 				label.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 				label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 				GridDataFactory.fillDefaults().grab(true, false).span(3, 1).applyTo(label);
 				String referenzStr = String.join(",", stoppBedingung.getNachfolger());
-				if( stoppBedingung.getRechner() != null && !stoppBedingung.getRechner().trim().isEmpty()) {
+				if (stoppBedingung.getRechner() != null && !stoppBedingung.getRechner().trim().isEmpty()) {
 					referenzStr = stoppBedingung.getRechner() + ": " + referenzStr;
 				}
 				label.setText(referenzStr);
@@ -253,12 +256,12 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 			}
 
 			StoppFehlerVerhalten stoppFehlerverhalten = inkarnation.getStoppFehlerVerhalten();
-			if( stoppFehlerverhalten != null) {
+			if (stoppFehlerverhalten != null) {
 				Group bedingungsGroup = new Group(group, SWT.NONE);
 				bedingungsGroup.setText("Stoppfehlerverhalten");
 				GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(bedingungsGroup);
 				bedingungsGroup.setLayout(new GridLayout(4, false));
-				
+
 				new Label(bedingungsGroup, SWT.NONE).setText("Option:");
 				label = new Label(bedingungsGroup, SWT.NONE);
 				label.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
@@ -273,7 +276,7 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 				GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 				label.setText(Util.nonEmptyString(stoppFehlerverhalten.getWiederholungen()));
 			}
-			
+
 		}
 	}
 
@@ -283,7 +286,7 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 		super(shell);
 		this.applikation = applikation;
 	}
-	
+
 	@Override
 	protected boolean isResizable() {
 		return true;
@@ -297,7 +300,18 @@ public class ApplikationInfoDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 
+		ImageRegistry imageRegistry = Activator.getDefault().getImageRegistry();
+		String imageFilePath = "icons/agent_prop_wiz.gif";
+
+		Image image = imageRegistry.get(imageFilePath);
+		if (image == null) {
+			imageRegistry.put(imageFilePath, Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, imageFilePath));
+			image = imageRegistry.get(imageFilePath);
+		}
+		setTitleImage(image);
+
 		setTitle("Applikation: " + applikation.getInkarnation().getInkarnationsName());
+		setMessage("Startparameter und weitere Informationen zum Starten und Beenden der Applikation.");
 
 		Composite panel = new Composite(parent, SWT.NONE);
 		panel.setLayout(new GridLayout());

@@ -5,10 +5,11 @@
          point="org.eclipse.ui.views">
       <e4view
             allowMultiple="false"
-            name="StartStopp"
             class="de.bsvrz.buv.plugin.startstopp.views.StartStoppView"
-            restorable="true"
-            id="de.bsvrz.buv.plugin.startstopp.view">
+            icon="icons/term_restart.gif"
+            id="de.bsvrz.buv.plugin.startstopp.view"
+            name="StartStopp"
+            restorable="true">
       </e4view>
    </extension>
 
