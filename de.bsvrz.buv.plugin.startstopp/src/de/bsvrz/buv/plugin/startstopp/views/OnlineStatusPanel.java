@@ -49,6 +49,7 @@ public class OnlineStatusPanel extends Composite {
 
 	private Label statusLabel;
 	private Label bmLabel;
+	private Label davLabel;
 	private Label abfrageLabel;
 
 	public OnlineStatusPanel(Composite parent) {
@@ -70,6 +71,10 @@ public class OnlineStatusPanel extends Composite {
 		bmLabel = new Label(group, SWT.NONE);
 		bmLabel.setText("BM: ???");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(bmLabel);
+
+		davLabel = new Label(group, SWT.NONE);
+		davLabel.setText("DAV: ???");
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(davLabel);
 	}
 
 	public void refresh(StartStoppClient client) {
@@ -109,6 +114,18 @@ public class OnlineStatusPanel extends Composite {
 						}
 					}
 				}
+				if (!davLabel.isDisposed()) {
+					if (startStoppStatus == null) {
+						davLabel.setText("");
+					} else {
+						if (startStoppStatus.getDavconnection()) {
+							davLabel.setText("DAV: EIN");
+						} else {
+							davLabel.setText("DAV: AUS");
+						}
+					}
+				}
+
 				return Status.OK_STATUS;
 			}
 		}.schedule();
