@@ -89,4 +89,17 @@
 		</pluginManagement>
 	</build>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>bitctrl.nexus.snapshots</id>
+            <name>Lokales BitCtrl Maven Snapshots Repository</name>
+            <url>http://bitctrlbuildserver:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>bitctrl.nexus</id>
+            <name>BitCtrl Nexus Releases Repository</name>
+            <url>http://bitctrlbuildserver:8081/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+	
 </project>
