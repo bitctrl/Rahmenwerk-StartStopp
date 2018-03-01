@@ -33,6 +33,12 @@
 			<url>http://bitctrl.de/projekte/kernsoftware</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+            <id>dav.allgemein.bnd</id>
+            <name>Allgemeine DAV-Updateseite BND</name>
+            <url>http://bitctrlbuildserver/dav/allgemein_bnd/</url>
+            <layout>p2</layout>
+        </repository>
 	</repositories>
 
 	<modules>
