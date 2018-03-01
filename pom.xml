@@ -44,7 +44,6 @@
 	<modules>
 		<module>de.bsvrz.buv.plugin.startstopp</module>
 		<module>de.bsvrz.buv.plugin.startstopp.feature</module>
-		<module>de.bsvrz.buv.plugin.startstopp.updatesite</module>
 	</modules>
 
 	<build>
